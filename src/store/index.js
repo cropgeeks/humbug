@@ -14,6 +14,8 @@ if (!name) {
 
 export default new Vuex.Store({
   state: {
+    uniqueClientId: null,
+    runCount: 0,
     maxImageHeight: 300,
     barcodeColumns: 3,
     barcodeHeight: 50,
@@ -25,6 +27,8 @@ export default new Vuex.Store({
     plausibleDomain: 'cropgeeks.github.io/humbug'
   },
   getters: {
+    storeRunCount: (state) => state.runCount,
+    storeUniqueClientId: (state) => state.uniqueClientId,
     storeMaxImageHeight: (state) => state.maxImageHeight,
     storeBarcodeHeight: (state) => state.barcodeHeight,
     storeBarcodeWidth: (state) => state.barcodeWidth,
@@ -36,6 +40,12 @@ export default new Vuex.Store({
     storePlausibleDomain: (state) => state.plausibleDomain
   },
   mutations: {
+    ON_RUN_COUNT_CHANGED_MUTATION: function (state, newRunCount) {
+      state.runCount = newRunCount
+    },
+    ON_UNIQUE_CLIENT_ID_CHANGED_MUTATION: function (state, newUniqueClientId) {
+      state.uniqueClientId = newUniqueClientId
+    },
     ON_MAX_IMAGE_HEIGHT_CHANGED_MUTATION: function (state, newMaxImageHeight) {
       state.maxImageHeight = newMaxImageHeight
     },
@@ -70,6 +80,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    setRunCount: function ({ commit }, runCount) {
+      commit('ON_RUN_COUNT_CHANGED_MUTATION', runCount)
+    },
+    setUniqueClientId: function ({ commit }, uniqueClientId) {
+      commit('ON_UNIQUE_CLIENT_ID_CHANGED_MUTATION', uniqueClientId)
+    },
     setMaxImageHeight: function ({ commit }, maxImageHeight) {
       commit('ON_MAX_IMAGE_HEIGHT_CHANGED_MUTATION', maxImageHeight)
     },

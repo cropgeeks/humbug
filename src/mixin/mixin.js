@@ -1,6 +1,7 @@
 export default {
   data: function () {
     return {
+      humbugVersion: '1.0.0',
       barcodeTypes: [
         'CODE128', 'CODE39', 'QR'
       ]

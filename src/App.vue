@@ -38,6 +38,7 @@ import EventBus from '@/plugins/event-bus.js'
 import { mapGetters } from 'vuex'
 import { loadLanguageAsync } from '@/plugins/i18n'
 import { BIconFolderPlus, BIconTrash, BIconDownload, BIconInfoCircle, BIconFlag } from 'bootstrap-vue'
+import { Detector } from '@/plugins/browser-detect.js'
 
 export default {
   components: {
@@ -65,10 +66,15 @@ export default {
     ...mapGetters([
       'storeLocale',
       'storePlausibleApiHost',
-      'storePlausibleDomain'
+      'storePlausibleDomain',
+      'storeUniqueClientId',
+      'storeRunCount'
     ])
   },
   methods: {
+    isLocalhost: function () {
+      return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === ''
+    },
     /**
      * When the locale is changed, update the i18n settings
      * @param language The newly selected locale
@@ -91,6 +97,47 @@ export default {
   },
   mounted: function () {
     loadLanguageAsync(this.storeLocale)
+
+    // Log the run
+    if (!this.isLocalhost()) {
+      let id = this.storeUniqueClientId
+      if (!id) {
+        id = this.uuidv4()
+
+        this.$store.dispatch('setUniqueClientId', id)
+      }
+
+      const config = new Detector().detect()
+      if (config.os !== undefined && config.os !== null && config.os !== 'Search Bot') {
+        const data = {
+          application: 'Humbug',
+          runCount: this.storeRunCount + 1,
+          id: id,
+          version: `${this.humbugVersion}`,
+          locale: this.storeLocale,
+          os: `${config.os} ${config.osVersion}`
+        }
+
+        const url = new URL('https://ics.hutton.ac.uk/app-logger/log')
+        url.search = new URLSearchParams(data).toString()
+
+        fetch(url, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8'
+          }
+        }).then(() => {
+            // If the call succeeds, reset the run count
+            this.$store.dispatch('setRunCount', 0)
+          })
+          .catch(e => {
+            console.error(e)
+            // If this call fails (e.g. no internet), remember the run
+            this.$store.dispatch('setRunCount', this.storeRunCount + 1)
+          })
+      }
+    }
 
     Vue.use(VuePlausible, {
       domain: this.storePlausibleDomain,
