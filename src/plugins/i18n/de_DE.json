@@ -1,8 +1,10 @@
 {
   "appName": "Humbug",
+  "buttonAdd": "Add",
   "buttonCancel": "Abbrechen",
   "buttonNo": "Nein",
   "buttonOk": "OK",
+  "buttonReplace": "Replace",
   "buttonTitleDeleteBarcode": "Barcode löschen",
   "buttonTitleRemoveImage": "Bild entfernen",
   "buttonTitleSelectImage": "Bild auswählen",
@@ -20,8 +22,12 @@
   "modalTextClearBarcodes": "Sicher, dass alle Barcodes entfernt werden sollen?",
   "modalTitleClearBarcodes": "Barcodes entfernen",
   "modalTitleImportClipboard": "Von Zwischenablage importieren",
+  "pageHeadingBarcodeType": "Barcode-Typ",
+  "pageHeadingBarcodes": "Barcodes",
   "pageTextAboutParagraphOne": "Humbug ist ein Tool um Barcodes zu erstellen und wird hauptsächlich benutzt um Bewertungsbögen für phänotypische Pflanzenfeldversuche zu erstellen. Allerdings kann es auch außerhalb dieses Bereiches vielseitig eingesetzt werden. Bitte zöger nicht, Humbug zum Erstellen von jeglichen Barcode-Bögen zu verwenden.",
   "pageTextAboutParagraphTwo": "Humbug wurde entwickelt von <a href='https: //www.hutton.ac.uk/staff/sebastian-raubach'>Sebastian Raubach</a>. Bei Fragen, Vorschlägen oder genereller Rückmeldung, bitte mit <a href='mailto:sebastian.raubach@hutton.ac.uk'>Sebastian</a> in Kontakt setzen.",
   "pageTextAboutGitHub": "Der Quellcode von Humbug ist verfügbar auf <a href='https://github.com/cropgeeks/humbug/'>GitHub</a>.",
+  "pageTextImport": "Bitte auswählen ob die neuen Elemente zu existierenden Barcodes in Humbug hinzugefügt werden sollen oder ob sie jegliche existierende Barcodes ersetzen sollen.",
+  "pageTitleImport": "Barcode-Import",
   "tooltipBarcodeEnter": "Enter drücken um Barcode zu setzen"
 }
