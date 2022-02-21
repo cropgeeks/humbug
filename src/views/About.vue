@@ -27,11 +27,11 @@
     <b-container class="py-5">
       <div class="text-center">
         <img src="@/assets/logo.svg" fluid  class="about-header-logo" alt="Humbug logo">
-        <h1 class="py-3">Humbug</h1>
+        <h1 class="py-3">{{ $t('appName') }}</h1>
       </div>
-      <p>Humbug is a barcode generation tool mainly developed to create phenotypic plant trial scoring sheets. However, it has many uses outside of this domain. Feel free to use it to generate any kind of barcode sheets.</p>
-      <p>Humbug has been developed by <a href="https://www.hutton.ac.uk/staff/sebastian-raubach">Sebastian Raubach</a>. If you have any questions, suggestions or general feedback, please contact <a href="mailto:sebastian.raubach@hutton.ac.uk">Sebastian</a>.</p>
-      <p><BIconGithub/> The source code of Humbug is available on <a href="https://github.com/cropgeeks/humbug/">GitHub</a>.</p>
+      <p>{{ $t('pageTextAboutParagraphOne') }}</p>
+      <p v-html="$t('pageTextAboutParagraphTwo')" />
+      <p><BIconGithub/> {{ $t('pageTextAboutGitHub') }}</p>
     </b-container>
   </div>
 </template>

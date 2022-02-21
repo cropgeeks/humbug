@@ -3,29 +3,29 @@
     <div class="settings">
       <b-row>
         <b-col cols=12 sm=3>
-          <b-form-group label="Number of columns" label-for="column-number">
+          <b-form-group :label="$t('formLabelNumberColumns')" label-for="column-number">
             <b-form-input type="number" :min="1" :max="4" v-model.number="barcodeColumns" id="column-number" />
           </b-form-group>
         </b-col>
         <b-col cols=12 sm=3>
-          <b-form-group label="Barcode width" label-for="barcode-width">
+          <b-form-group :label="$t('formLabelBarcodeWidth')" label-for="barcode-width">
             <b-form-input type="number" :min="1" :max="5" v-model.number="barcodeWidth" id="barcode-width" />
           </b-form-group>
         </b-col>
         <b-col cols=12 sm=3>
-          <b-form-group label="Barcode height" label-for="barcode-height">
+          <b-form-group :label="$t('formLabelBarcodeHeight')" label-for="barcode-height">
             <b-form-input type="number" :min="50" :max="100" v-model.number="barcodeHeight" id="barcode-height" />
           </b-form-group>
         </b-col>
         <b-col cols=12 sm=3>
-          <b-form-group label="Default barcode type" label-for="barcode-type">
+          <b-form-group :label="$t('formLabelBarcodeDefaultType')" label-for="barcode-type">
             <b-form-select :options="barcodeTypes" v-model="barcodeType" id="barcode-type" />
           </b-form-group>
         </b-col>
       </b-row>
       <b-row>
         <b-col cols=12 sm=3>
-          <b-form-group label="Max. image height" label-for="image-height">
+          <b-form-group :label="$t('formLabelImageMaxHeight')" label-for="image-height">
             <b-form-input type="number" :min="100" :max="800" v-model.number="imageHeight" id="image-height" />
           </b-form-group>
         </b-col>

@@ -19,7 +19,10 @@ export default new Vuex.Store({
     barcodeHeight: 50,
     barcodeWidth: 2,
     defaultBarcodeType: 'CODE128',
-    barcodes: []
+    barcodes: [],
+    locale: 'en_GB',
+    plausibleApiHost: 'https://plausible.hutton.ac.uk',
+    plausibleDomain: 'cropgeeks.github.io/humbug'
   },
   getters: {
     storeMaxImageHeight: (state) => state.maxImageHeight,
@@ -27,7 +30,10 @@ export default new Vuex.Store({
     storeBarcodeWidth: (state) => state.barcodeWidth,
     storeBarcodeColumns: (state) => state.barcodeColumns,
     storeDefaultBarcodeType: (state) => state.defaultBarcodeType,
-    storeBarcodes: (state) => state.barcodes
+    storeBarcodes: (state) => state.barcodes,
+    storeLocale: (state) => state.locale,
+    storePlausibleApiHost: (state) => state.plausibleApiHost,
+    storePlausibleDomain: (state) => state.plausibleDomain
   },
   mutations: {
     ON_MAX_IMAGE_HEIGHT_CHANGED_MUTATION: function (state, newMaxImageHeight) {
@@ -58,6 +64,9 @@ export default new Vuex.Store({
       Vue.set(state.barcodes, update.index, update.value)
 
       EventBus.emit('barcode-updated', update.index)
+    },
+    ON_LOCALE_CHANGED_MUTATION: function (state, newLocale) {
+      state.locale = newLocale
     }
   },
   actions: {
@@ -87,6 +96,9 @@ export default new Vuex.Store({
     },
     updateBarcode: function ({ commit }, update) {
       commit('ON_BARCODE_UPDATED_MUTATION', update)
+    },
+    setLocale: function ({ commit }, locale) {
+      commit('ON_LOCALE_CHANGED_MUTATION', locale)
     }
   },
   plugins: [createPersistedState({

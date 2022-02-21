@@ -10,10 +10,19 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item href="#" @click="onImportClicked"><BIconFolderPlus /> Import</b-nav-item>
-          <b-nav-item href="#" @click="onClearClicked"><BIconTrash /> Clear</b-nav-item>
-          <b-nav-item href="#" @click="print"><BIconDownload /> Print</b-nav-item>
-          <b-nav-item :to="{ name: 'about' }"><BIconInfoCircle /> About</b-nav-item>
+          <b-nav-item-dropdown right>
+            <template #button-content>
+              <BIconFlag /><span> {{ $t('menuLocale') }}</span>
+            </template>
+            <b-dropdown-item v-for="language in languages" :key="`locale-${language.locale}`" @click="onLocaleChanged(language)">
+              <span class="mr-2">{{ language.icon }}</span>
+              <span>{{ language.name }}</span>
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+          <b-nav-item href="#" @click="onImportClicked"><BIconFolderPlus /> {{ $t('menuImport') }}</b-nav-item>
+          <b-nav-item href="#" @click="onClearClicked"><BIconTrash /> {{ $t('menuClear') }}</b-nav-item>
+          <b-nav-item href="#" @click="print"><BIconDownload /> {{ $t('menuPrint') }}</b-nav-item>
+          <b-nav-item :to="{ name: 'about' }"><BIconInfoCircle /> {{ $t('menuAbout') }}</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -23,17 +32,53 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { VuePlausible } from 'vue-plausible'
 import EventBus from '@/plugins/event-bus.js'
-import { BIconFolderPlus, BIconTrash, BIconDownload, BIconInfoCircle } from 'bootstrap-vue'
+import { mapGetters } from 'vuex'
+import { loadLanguageAsync } from '@/plugins/i18n'
+import { BIconFolderPlus, BIconTrash, BIconDownload, BIconInfoCircle, BIconFlag } from 'bootstrap-vue'
 
 export default {
   components: {
     BIconFolderPlus,
     BIconTrash,
     BIconDownload,
-    BIconInfoCircle
+    BIconInfoCircle,
+    BIconFlag
+  },
+  data: function () {
+    return {
+      languages: [{
+        locale: 'en_GB',
+        name: 'British English',
+        icon: '🇬🇧'
+      }, {
+        locale: 'de_DE',
+        name: 'Deutsch - Deutschland',
+        icon: '🇩🇪'
+      }]
+    }
+  },
+  computed: {
+    /** Mapgetters exposing the store configuration */
+    ...mapGetters([
+      'storeLocale',
+      'storePlausibleApiHost',
+      'storePlausibleDomain'
+    ])
   },
   methods: {
+    /**
+     * When the locale is changed, update the i18n settings
+     * @param language The newly selected locale
+     */
+    onLocaleChanged: function (language) {
+      loadLanguageAsync(language.locale).then(() => {
+        this.$i18n.locale = language.locale
+        this.$store.dispatch('setLocale', language.locale)
+      })
+    },
     onImportClicked: function () {
       EventBus.emit('show-import')
     },
@@ -43,6 +88,20 @@ export default {
     print: function () {
       window.print()
     }
+  },
+  mounted: function () {
+    loadLanguageAsync(this.storeLocale)
+
+    Vue.use(VuePlausible, {
+      domain: this.storePlausibleDomain,
+      hashMode: true,
+      apiHost: this.storePlausibleApiHost,
+      trackLocalhost: false
+    })
+
+    this.$nextTick(() => {
+      this.$plausible.enableAutoPageviews()
+    })
   }
 }
 </script>

@@ -5,9 +5,9 @@
     <b-row>
       <b-col xs=12 class="card-actions">
         <b-button-group class="float-right flex-wrap">
-          <b-btn size=sm title="buttonTitleSelectImage" @click="selectImage"><BIconImage /></b-btn>
-          <b-btn size=sm title="buttonTitleRemoveImage" v-if="image" @click="deleteImage"><BIconXSquare /></b-btn>
-          <b-btn size=sm title="buttonTitleDeleteBarcode" @click="$emit('delete-barcode')" variant="danger"><BIconTrash /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleSelectImage')" @click="selectImage"><BIconImage /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleRemoveImage')" v-if="image" @click="deleteImage"><BIconXSquare /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleDeleteBarcode')" @click="$emit('delete-barcode')" variant="danger"><BIconTrash /></b-btn>
         </b-button-group>
       </b-col>
     </b-row>
