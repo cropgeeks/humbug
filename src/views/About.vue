@@ -31,7 +31,7 @@
       </div>
       <p>{{ $t('pageTextAboutParagraphOne') }}</p>
       <p v-html="$t('pageTextAboutParagraphTwo')" />
-      <p><BIconGithub/> {{ $t('pageTextAboutGitHub') }}</p>
+      <p><BIconGithub/> <span v-html="$t('pageTextAboutGitHub')" /></p>
     </b-container>
   </div>
 </template>
