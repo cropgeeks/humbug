@@ -124,9 +124,6 @@ export default {
 }
 
 @media print {
-  @page { margin: 0; }
-  body { margin: 1.6cm; }
-
   .no-print {
     display: none !important;
   }
