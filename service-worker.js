@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "precache-manifest.018fabe2e8d65deffe519375af720ef3.js"
+  "precache-manifest.0d83742095b9cd3e722552991f9f18a3.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "humbug"});
