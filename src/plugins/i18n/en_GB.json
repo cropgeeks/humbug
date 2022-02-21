@@ -1,8 +1,10 @@
 {
   "appName": "Humbug",
+  "buttonAdd": "Add",
   "buttonCancel": "Cancel",
   "buttonNo": "No",
   "buttonOk": "OK",
+  "buttonReplace": "Replace",
   "buttonTitleDeleteBarcode": "Delete barcode",
   "buttonTitleRemoveImage": "Remove image",
   "buttonTitleSelectImage": "Select image",
