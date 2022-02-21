@@ -1,10 +1,12 @@
 <template>
   <b-container class="mt-3">
     <h1>{{ $t('pageTitleImport') }}</h1>
-    <h4>{{ $t('pageHeadingBarcodeType') }}</h4>
-    <b-form-select :options="barcodeTypes" v-model="barcodeType" />
-    <h4>{{ $t('pageHeadingBarcodes') }}</h4>
-    <b-form-textarea v-model="barcodeString" :rows="barcodes.length" debounce="500" />
+    <b-form-group :label="$t('formLabelBarcodeType')" label-for="barcode-type">
+      <b-form-select :options="barcodeTypes" v-model="barcodeType" id="barcode-type" />
+    </b-form-group>
+    <b-form-group :label="$t('formLabelBarcodes')" label-for="barcodes">
+      <b-form-textarea v-model="barcodeString" :rows="barcodes.length" debounce="500" id="barcodes" />
+    </b-form-group>
 
     <p>{{ $t('pageTextImport') }}</p>
     <b-button @click="addBarcodes"><BIconJournalPlus /> {{ $t('buttonAdd') }}</b-button> <b-button @click="replaceBarcodes"><BIconJournalX /> {{ $t('buttonReplace') }} </b-button>
