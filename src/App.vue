@@ -21,7 +21,7 @@
           </b-nav-item-dropdown>
           <b-nav-item href="#" @click="onImportClicked"><BIconFolderPlus /> {{ $t('menuImport') }}</b-nav-item>
           <b-nav-item href="#" @click="onClearClicked"><BIconTrash /> {{ $t('menuClear') }}</b-nav-item>
-          <b-nav-item href="#" @click="print"><BIconDownload /> {{ $t('menuPrint') }}</b-nav-item>
+          <b-nav-item href="#" @click="print"><BIconPrinter /> {{ $t('menuPrint') }}</b-nav-item>
           <b-nav-item :to="{ name: 'about' }"><BIconInfoCircle /> {{ $t('menuAbout') }}</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
@@ -37,14 +37,14 @@ import { VuePlausible } from 'vue-plausible'
 import EventBus from '@/plugins/event-bus.js'
 import { mapGetters } from 'vuex'
 import { loadLanguageAsync } from '@/plugins/i18n'
-import { BIconFolderPlus, BIconTrash, BIconDownload, BIconInfoCircle, BIconFlag } from 'bootstrap-vue'
+import { BIconFolderPlus, BIconTrash, BIconPrinter, BIconInfoCircle, BIconFlag } from 'bootstrap-vue'
 import { Detector } from '@/plugins/browser-detect.js'
 
 export default {
   components: {
     BIconFolderPlus,
     BIconTrash,
-    BIconDownload,
+    BIconPrinter,
     BIconInfoCircle,
     BIconFlag
   },
@@ -68,6 +68,7 @@ export default {
       'storePlausibleApiHost',
       'storePlausibleDomain',
       'storeUniqueClientId',
+      'storeDnDDisabled',
       'storeRunCount'
     ])
   },

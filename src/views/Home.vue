@@ -22,11 +22,14 @@
             <b-form-select :options="barcodeTypes" v-model="barcodeType" id="barcode-type" />
           </b-form-group>
         </b-col>
-      </b-row>
-      <b-row>
         <b-col cols=12 sm=3>
           <b-form-group :label="$t('formLabelImageMaxHeight')" label-for="image-height">
             <b-form-input type="number" :min="100" :max="800" v-model.number="imageHeight" id="image-height" />
+          </b-form-group>
+        </b-col>
+        <b-col cols=12 sm=3>
+          <b-form-group :label="$t('formLabelDnDStatus')" label-for="enabled-dnd">
+            <b-form-checkbox switch v-model="dndEnabled" id="disable-dnd">{{ dndEnabled ? $t('checkboxEnabled') : $t('checkboxDisabled') }}</b-form-checkbox>
           </b-form-group>
         </b-col>
       </b-row>
@@ -38,7 +41,7 @@
         </b-col>
       </b-row>
     </div>
-    <draggable v-model="barcodeList" tag="b-row" class="no-print">
+    <draggable v-model="barcodeList" tag="b-row" class="no-print" :disabled="!dndEnabled">
       <b-col :cols="12 / storeBarcodeColumns" v-for="(barcode, index) in barcodeList" :key="`barcode-${barcode.uuid}`" class="mb-4 barcode-cell">
         <Barcode :index="index" @delete-barcode="deleteBarcode(index)" />
       </b-col>
@@ -78,6 +81,7 @@ export default {
   computed: {
     ...mapGetters([
       'storeBarcodes',
+      'storeDnDEnabled',
       'storeMaxImageHeight',
       'storeBarcodeHeight',
       'storeBarcodeWidth',
@@ -91,6 +95,16 @@ export default {
       set (value) {
         this.$store.commit('ON_BARCODES_CHANGED_MUTATION', value)
       }
+    }
+  },
+  data: function () {
+    return {
+      barcodeHeight: null,
+      barcodeWidth: null,
+      barcodeColumns: null,
+      barcodeType: null,
+      imageHeight: null,
+      dndEnabled: false
     }
   },
   watch: {
@@ -108,15 +122,9 @@ export default {
     },
     imageHeight: function (newValue) {
       this.$store.dispatch('setMaxImageHeight', newValue)
-    }
-  },
-  data: function () {
-    return {
-      barcodeHeight: null,
-      barcodeWidth: null,
-      barcodeColumns: null,
-      barcodeType: null,
-      imageHeight: null
+    },
+    dndEnabled: function (newValue) {
+      this.$store.dispatch('setDnDEnabled', newValue)
     }
   },
   methods: {
@@ -161,6 +169,7 @@ export default {
     this.barcodeColumns = this.storeBarcodeColumns
     this.barcodeType = this.storeDefaultBarcodeType
     this.imageHeight = this.storeMaxImageHeight
+    this.dndEnabled = this.storeDnDEnabled
 
     EventBus.on('show-import', this.showImportModal)
     EventBus.on('clear-barcodes', this.clearBarcodes)

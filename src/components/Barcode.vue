@@ -19,6 +19,7 @@
             <VueQrcode class="barcode" :value="text" :options="{ scale: storeBarcodeWidth + 1 }" @click.native="onBarcodeClicked" v-if="type === 'QR'" />
             <VueBarcode :value="text"
                         :format="type"
+                        elementTag="canvas"
                         :width="storeBarcodeWidth"
                         :height="storeBarcodeHeight"
                         class="barcode text-center"
@@ -218,7 +219,9 @@ export default {
     break-inside: avoid;
   }
 }
-.barcode svg {
+.barcode svg,
+.barcode img,
+.barcode canvas {
   max-width: 100%;
 }
 canvas.barcode {

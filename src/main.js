@@ -20,6 +20,7 @@ import {
   FormGroupPlugin,
   FormFilePlugin,
   FormSelectPlugin,
+  FormCheckboxPlugin,
   CardPlugin,
   FormTextareaPlugin,
   InputGroupPlugin,
@@ -43,6 +44,7 @@ Vue.use(FormInputPlugin)
 Vue.use(FormGroupPlugin)
 Vue.use(FormFilePlugin)
 Vue.use(FormSelectPlugin)
+Vue.use(FormCheckboxPlugin)
 Vue.use(CardPlugin)
 Vue.use(InputGroupPlugin)
 Vue.use(TooltipPlugin)

@@ -16,6 +16,7 @@ export default new Vuex.Store({
   state: {
     uniqueClientId: null,
     runCount: 0,
+    dndEnabled: true,
     maxImageHeight: 300,
     barcodeColumns: 3,
     barcodeHeight: 50,
@@ -29,6 +30,7 @@ export default new Vuex.Store({
   getters: {
     storeRunCount: (state) => state.runCount,
     storeUniqueClientId: (state) => state.uniqueClientId,
+    storeDnDEnabled: (state) => state.dndEnabled,
     storeMaxImageHeight: (state) => state.maxImageHeight,
     storeBarcodeHeight: (state) => state.barcodeHeight,
     storeBarcodeWidth: (state) => state.barcodeWidth,
@@ -40,6 +42,9 @@ export default new Vuex.Store({
     storePlausibleDomain: (state) => state.plausibleDomain
   },
   mutations: {
+    ON_DND_ENABLED_CHANGED_MUTATION: function (state, newDndEnabled) {
+      state.dndEnabled = newDndEnabled
+    },
     ON_RUN_COUNT_CHANGED_MUTATION: function (state, newRunCount) {
       state.runCount = newRunCount
     },
@@ -80,6 +85,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    setDnDEnabled: function ({ commit }, dndEnabled) {
+      commit('ON_DND_ENABLED_CHANGED_MUTATION', dndEnabled)
+    },
     setRunCount: function ({ commit }, runCount) {
       commit('ON_RUN_COUNT_CHANGED_MUTATION', runCount)
     },
