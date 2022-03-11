@@ -19,8 +19,19 @@
               <span>{{ language.name }}</span>
             </b-dropdown-item>
           </b-nav-item-dropdown>
-          <b-nav-item href="#" @click="onImportClicked"><BIconFolderPlus /> {{ $t('menuImport') }}</b-nav-item>
+          <b-nav-item-dropdown right>
+            <template #button-content>
+              <BIconFolderPlus /> {{ $t('menuImport') }}
+            </template>
+            <b-dropdown-item  @click="onImportFromFileClicked">
+              <BIconFileEarmarkPlus /> {{ $t('menuImportFile') }}
+            </b-dropdown-item>
+            <b-dropdown-item @click="onImportFromClipboardClicked">
+              <BIconClipboardPlus /> {{ $t('menuImportClipboard') }}
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
           <b-nav-item href="#" @click="onClearClicked"><BIconTrash /> {{ $t('menuClear') }}</b-nav-item>
+          <b-nav-item href="#" @click="onExportJsonClicked"><BIconFileEarmarkCode /> {{ $t('menuSaveConfig') }}</b-nav-item>
           <b-nav-item href="#" @click="print"><BIconPrinter /> {{ $t('menuPrint') }}</b-nav-item>
           <b-nav-item :to="{ name: 'about' }"><BIconInfoCircle /> {{ $t('menuAbout') }}</b-nav-item>
         </b-navbar-nav>
@@ -37,8 +48,10 @@ import { VuePlausible } from 'vue-plausible'
 import EventBus from '@/plugins/event-bus.js'
 import { mapGetters } from 'vuex'
 import { loadLanguageAsync } from '@/plugins/i18n'
-import { BIconFolderPlus, BIconTrash, BIconPrinter, BIconInfoCircle, BIconFlag } from 'bootstrap-vue'
+import { BIconFolderPlus, BIconTrash, BIconPrinter, BIconInfoCircle, BIconFlag, BIconFileEarmarkPlus, BIconClipboardPlus, BIconFileEarmarkCode } from 'bootstrap-vue'
 import { Detector } from '@/plugins/browser-detect.js'
+
+import idb from '@/plugins/idb'
 
 export default {
   components: {
@@ -46,7 +59,10 @@ export default {
     BIconTrash,
     BIconPrinter,
     BIconInfoCircle,
-    BIconFlag
+    BIconFlag,
+    BIconFileEarmarkPlus,
+    BIconClipboardPlus,
+    BIconFileEarmarkCode
   },
   data: function () {
     return {
@@ -68,8 +84,8 @@ export default {
       'storePlausibleApiHost',
       'storePlausibleDomain',
       'storeUniqueClientId',
-      'storeDnDDisabled',
-      'storeRunCount'
+      'storeRunCount',
+      'storeBarcodes'
     ])
   },
   methods: {
@@ -86,11 +102,71 @@ export default {
         this.$store.dispatch('setLocale', language.locale)
       })
     },
-    onImportClicked: function () {
+    onExportJsonClicked: function () {
+      if (this.storeBarcodes) {
+        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.storeBarcodes))
+        const dlAnchorElem = document.createElement('a')
+        dlAnchorElem.setAttribute('href', dataStr)
+        dlAnchorElem.setAttribute('download', 'humbug.json')
+        dlAnchorElem.click()
+      }
+    },
+    onImportFromClipboardClicked: function () {
       EventBus.emit('show-import')
+    },
+    onImportFromFileClicked: function () {
+      const input = document.createElement('input')
+      input.type = 'file'
+      input.accept = 'application/JSON'
+
+      input.onchange = e => {
+        const file = e.target.files[0]
+
+        const reader = new FileReader()
+        reader.onload = event => {
+          try {
+            const json = JSON.parse(event.target.result)
+
+            if (!Array.isArray(json)) {
+              this.$bvModal.msgBoxOk(this.$t('modalTextImportError'), {
+                title: this.$t('modalTitleImportError'),
+                okTitle: this.$t('buttonOk')
+              })
+            } else {
+              const barcodes = json.map(b => {
+                if (!b.text) {
+                  return null
+                } else {
+                  return {
+                    text: b.text,
+                    type: b.type,
+                    uuid: b.uuid || this.uuidv4(),
+                    image: b.image
+                  }
+                }
+              }).filter(b => b !== null)
+
+              this.$store.dispatch('setBarcodes', barcodes)
+
+              idb.setBarcodeImages(barcodes)
+            }
+          } catch (err) {
+            console.error(err)
+            this.$bvModal.msgBoxOk(err, {
+              title: this.$t('modalTitleImportError'),
+              okTitle: this.$t('buttonOk')
+            })
+          }
+        }
+        reader.readAsText(file)
+      }
+
+      input.click()
     },
     onClearClicked: function () {
       EventBus.emit('clear-barcodes')
+
+      idb.clearImages()
     },
     print: function () {
       window.print()

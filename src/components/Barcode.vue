@@ -7,7 +7,7 @@
         <b-button-group class="float-right flex-wrap">
           <b-btn size=sm :title="$t('buttonTitleSelectImage')" @click="selectImage"><BIconImage /></b-btn>
           <b-btn size=sm :title="$t('buttonTitleRemoveImage')" v-if="image" @click="deleteImage"><BIconXSquare /></b-btn>
-          <b-btn size=sm :title="$t('buttonTitleDeleteBarcode')" @click="$emit('delete-barcode')" variant="danger"><BIconTrash /></b-btn>
+          <b-btn size=sm :title="$t('buttonTitleDeleteBarcode')" @click="onDeleteBarcode" variant="danger"><BIconTrash /></b-btn>
         </b-button-group>
       </b-col>
     </b-row>
@@ -45,6 +45,8 @@ import VueQrcode from '@chenfengyuan/vue-qrcode'
 import { BIconImage, BIconTrash, BIconXSquare } from 'bootstrap-vue'
 
 import Compressor from 'compressorjs'
+
+import idb from '@/plugins/idb'
 
 export default {
   components: {
@@ -95,6 +97,10 @@ export default {
     }
   },
   methods: {
+    onDeleteBarcode: function () {
+      idb.deleteImage(this.barcode.uuid)
+      this.$emit('delete-barcode')
+    },
     updateBarcode: function () {
       if (this.storeBarcodes && this.storeBarcodes.length > this.index) {
         this.barcode = this.storeBarcodes[this.index]
@@ -106,7 +112,13 @@ export default {
         this.show = true
         this.text = this.barcode.text
         this.type = this.barcode.type
-        this.image = this.barcode.image
+
+        idb.getImage(this.barcode.uuid)
+          .then(image => {
+            if (image) {
+              this.image = image.imageData
+            }
+          })
       }
     },
     onFocusLost: function (event) {
@@ -128,6 +140,8 @@ export default {
     },
     deleteImage: function () {
       this.image = null
+
+      idb.deleteImage(this.barcode.uuid)
     },
     storeUpdate: function () {
       this.$store.dispatch('updateBarcode', {
@@ -150,9 +164,10 @@ export default {
 
         /* eslint-disable no-new */
         new Compressor(file, {
-          quality: 0.6,
-          maxWidth: 600,
-          maxHeight: 600,
+          convertSize: 100000,
+          quality: 0.5,
+          maxWidth: 500,
+          maxHeight: 500,
 
           // The compression process is asynchronous,
           // which means you have to access the `result` in the `success` hook function.
@@ -161,6 +176,8 @@ export default {
             reader.onload = () => {
               this.image = reader.result
               input.remove()
+
+              idb.addImage(this.barcode.uuid, reader.result)
             }
             reader.readAsDataURL(result)
           },
