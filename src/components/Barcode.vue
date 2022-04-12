@@ -132,7 +132,7 @@ export default {
       this.$nextTick(() => this.forceFocus())
     },
     forceFocus: function () {
-      var ref = this.$refs.barcodeText
+      const ref = this.$refs.barcodeText
       ref.focus()
       if (ref.value) {
         ref.setSelectionRange(0, ref.value.length)
