@@ -1,7 +1,7 @@
 <template>
   <div class="about-content">
     <!-- Hutton banner -->
-    <b-container fluid class="footer px-0">
+    <b-container fluid class="footer">
       <b-row class="hutton-header">
         <b-col id="hutton-banner-hunger" />
         <b-col id="hutton-banner-education" />
