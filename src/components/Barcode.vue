@@ -87,7 +87,8 @@ export default {
       'storeBarcodes',
       'storeBarcodeHeight',
       'storeBarcodeWidth',
-      'storeMaxImageHeight'
+      'storeMaxImageHeight',
+      'storeDefaultBarcodeType'
     ]),
     style: function () {
       return ''
@@ -191,6 +192,7 @@ export default {
     }
   },
   mounted: function () {
+    this.type = this.storeDefaultBarcodeType || 'CODE128'
     this.updateBarcode()
   }
 }
