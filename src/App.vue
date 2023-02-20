@@ -260,5 +260,8 @@ export default {
   .card {
     border: 0;
   }
+  .card-body {
+    padding: 1.25rem 0;
+  }
 }
 </style>
